@@ -1,0 +1,23 @@
+# Backend and API
+fastapi
+uvicorn
+pydantic
+python-dotenv
+
+# Web and UI
+streamlit
+requests
+
+# RAG and Vector Store
+langchain
+langchain-community
+langchain-groq
+langchain-text-splitters
+chromadb
+pypdf
+
+# Embeddings and Models
+transformers
+torch
+sentencepiece
+numpy

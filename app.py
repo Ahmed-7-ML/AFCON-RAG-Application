@@ -4,7 +4,7 @@ from langchain_community.vectorstores import Chroma
 from config import BGEEmbeddings, llm, prompt_template
 import base64
 import streamlit as st
-import requests
+# import requests
 
 st.set_page_config(page_title="AFCON AI Assistant", page_icon="⚽")
 
@@ -56,7 +56,7 @@ if st.button("Submit"):
 
                 # if response.status_code == 200:
                 #     answer = response.json().get("answer")
-                    st.success("Answer: ")
+                    answer = rag_chain.invoke(user_query)
                     st.success(answer)
                 # else:
                 #     st.error("An error occurred while connecting to the server.")

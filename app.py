@@ -1,3 +1,7 @@
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough
+from langchain_community.vectorstores import Chroma
+from config import BGEEmbeddings, llm, prompt_template
 import base64
 import streamlit as st
 import requests
@@ -26,6 +30,17 @@ def set_png_as_page_bg(bin_file):
 
 set_png_as_page_bg('bg.jpg')
 
+# Initialize vectorstore
+vector_store = Chroma(persist_directory='./afcon_chroma_db', embedding_function=BGEEmbeddings())
+retriever = vector_store.as_retriever(search_kwargs={"k": 3})
+
+rag_chain = (
+    {"context": retriever, "question": RunnablePassthrough()}
+    | prompt_template
+    | llm
+    | StrOutputParser()
+)
+
 st.title("⚽ AFCON Chatbot")
 st.markdown("Ask me anything about the Africa Cup of Nations (2006-2026)")
 
@@ -35,16 +50,16 @@ if st.button("Submit"):
     if user_query:
         with st.spinner("We are currently searching the documents and generating the answer..."):
             try:
-                payload = {"question": user_query}
-                response = requests.post(
-                    "http://127.0.0.1:8000/ask", json=payload)
+                # payload = {"question": user_query}
+                # response = requests.post(
+                #     "http://127.0.0.1:8000/ask", json=payload)
 
-                if response.status_code == 200:
-                    answer = response.json().get("answer")
+                # if response.status_code == 200:
+                #     answer = response.json().get("answer")
                     st.success("Answer: ")
                     st.success(answer)
-                else:
-                    st.error("An error occurred while connecting to the server.")
+                # else:
+                #     st.error("An error occurred while connecting to the server.")
             except Exception as e:
                 st.error(f"Error: {e}")
     else:
